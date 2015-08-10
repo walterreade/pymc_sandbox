@@ -71,8 +71,9 @@ with mc.Model() as model:
   s = mc.HalfNormal('s', sd=10)
   
   mu = mc.Deterministic('mu', c0 * t.pow((1./r), c1))
-  
-  gr_sim = mc.Normal('gr_sim', mu=mu, sd=s, observed=g)
+ 
+#  gr_sim = mc.Normal('gr_sim', mu=mu, sd=s, observed=g) 
+  gr_sim = mc.T('gr_sim', nu=1, mu=mu, lam=s, observed=g)
   
   start = mc.find_MAP(model=model, fmin=optimize.fmin_powell)
   step = mc.NUTS(scaling=start)
@@ -111,6 +112,3 @@ ax.set_xscale('log')
 
 plt.xlim((0,cutoff))
 plt.ylim((0,30))
-
-
-plt.show()
